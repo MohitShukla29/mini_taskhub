@@ -1,31 +1,34 @@
-<div align="center"> <h1><font size="10">Mini TaskHub 📋</font></h1> <h3><font size="4">A simple yet elegant Flutter app for tracking your personal tasks. Built with Supabase Auth, GetX state management, and a responsive UI based on a Figma design.</font></h3> <br>
-  </div>
-✨ Key Features
-🔐 Email/Password Authentication via Supabase
+<div align="center"> 
+  <h1><font size="10">Mini TaskHub 📋</font></h1> 
+  <h3><font size="4">A simple yet elegant Flutter app for tracking your personal tasks. Built with Supabase Auth, GetX state management, and a responsive UI based on a Figma design.</font></h3> 
+  <br>
+</div>
 
-🧾 Add/Delete/Edit/Complete Tasks
+## ✨ Key Features
 
-🔁 Real-Time Updates
+- 🔐 Email/Password Authentication via Supabase  
+- 🧾 Add/Delete/Edit/Complete Tasks  
+- 🔁 Real-Time Updates  
+- 🎨 Responsive UI from a Figma Prototype  
+- 🌙 Light/Dark Mode Toggle  
+- 💾 Supabase Backend (Database + Auth)  
+- ⚙️ GetX for State Management & Routing  
+- 🛠️ Clean Folder Structure  
+- 🎥 Smooth Transitions & Animations  
+- 📝 Task Editing  
 
-🎨 Responsive UI from a Figma Prototype
+## 🧑‍💻 Tech Stack
 
-🌙 Light/Dark Mode Toggle
+<div align="center"> 
+  <a href="https://flutter.dev/"><img src="https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=flutter&logoColor=white"></a> 
+  <a href="https://supabase.com/"><img src="https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white"></a> 
+  <a href="https://dart.dev/"><img src="https://img.shields.io/badge/Dart-0175C2.svg?style=for-the-badge&logo=dart&logoColor=white"></a> 
+  <a href="https://getx.site/"><img src="https://img.shields.io/badge/GetX-7B1FA2?style=for-the-badge&logo=dart&logoColor=white"></a> 
+</div>
 
-💾 Supabase Backend (Database + Auth)
+## 📁 Folder Structure
 
-⚙️ GetX for State Management & Routing
-
-🛠️ Clean Folder Structure
-
-🎥 Smooth Transitions & Animations
-
-📝 Task Editing
-
-🧑‍💻 Tech Stack
-<div align="center"> <a href="https://flutter.dev/"><img src="https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=flutter&logoColor=white"></a> <a href="https://supabase.com/"><img src="https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white"></a> <a href="https://dart.dev/"><img src="https://img.shields.io/badge/Dart-0175C2.svg?style=for-the-badge&logo=dart&logoColor=white"></a> <a href="https://getx.site/"><img src="https://img.shields.io/badge/GetX-7B1FA2?style=for-the-badge&logo=dart&logoColor=white"></a> </div>
-
-📁 Folder Structure
-
+```
 lib/
 │
 ├── auth/
@@ -50,11 +53,11 @@ lib/
 │
 └── test/
     └── widget_test.dart              # Basic test file
+```
 
-🚀 Getting Started
+## 🚀 Getting Started
 
-<br>
-
+```bash
 # 1. Clone the repository
 git clone https://github.com/MohitShukla29/mini_taskhub
 
@@ -69,26 +72,28 @@ flutter pub get
 
 # 5. Run the app
 flutter run
+```
 
+## 🛠️ Supabase Setup
 
-
-🛠️ Supabase Setup
 Follow these steps to set up Supabase for this project:
 
-1️⃣ Create a Supabase Project
-Go to https://supabase.com and create a new project.
+### 1️⃣ Create a Supabase Project
 
-Set a Project Name, Database Password, and Region.
+- Go to [Supabase](https://supabase.com) and create a new project.  
+- Set a Project Name, Database Password, and Region.  
+- Wait for the project to initialize.
 
-Wait for the project to initialize.
+### 2️⃣ Enable Authentication
 
-2️⃣ Enable Authentication
-Go to Authentication → Providers.
+- Go to **Authentication → Providers**.  
+- Enable **Email/Password authentication**.
 
-Enable Email/Password authentication.
+### 3️⃣ Create the `tasks` Table
 
-3️⃣ Create the tasks Table
-Navigate to Database → SQL Editor, and run the following SQL to create the tasks table:.
+Go to **Database → SQL Editor**, and run the following SQL:
+
+```sql
 create table public.tasks (
   id uuid default uuid_generate_v4() primary key,
   title text not null,
@@ -100,16 +105,17 @@ create table public.tasks (
   user_id uuid references auth.users(id) not null,
   created_at timestamp with time zone default now()
 );
-4️⃣ Get Supabase Keys
-Go to Project Settings → API
+```
 
-Copy the following:
+### 4️⃣ Get Supabase Keys
 
-SUPABASE_URL
+- Go to **Project Settings → API**
+- Copy the following:
+  - `SUPABASE_URL`
+  - `SUPABASE_ANON_KEY`
 
-SUPABASE_ANON_KEY
+### 5️⃣ Add to Your Project
 
-5️⃣ Add to Your Project
-Add these to your .env file (or directly into supabase_service.dart):
+- Add these to your `.env` file (or directly into `supabase_service.dart`)
 
 
