@@ -287,7 +287,7 @@ class DashboardScreen extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: controller.themeController.isDarkMode.value
                       ? const Color(0xFF2A3642)
-                      : Colors.grey[200],
+                      : const Color(0xFFFFF8E1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Row(
@@ -357,7 +357,7 @@ class DashboardScreen extends StatelessWidget {
               fontWeight: FontWeight.bold,
               color: controller.themeController.isDarkMode.value
                   ? Colors.white
-                  : Colors.black,
+                  : Colors.black87,
             ),
           ),
           if (showAll)
@@ -501,30 +501,167 @@ class DashboardScreen extends StatelessWidget {
   }
 
   void _showTaskOptions(
-    BuildContext context,
-    Task task,
-    DashboardController controller,
-  ) {
+      BuildContext context,
+      Task task,
+      DashboardController controller,
+      ) {
+    final themeController = Get.find<ThemeController>();
+    final isSmallScreen = MediaQuery.of(context).size.width < 360;
+    final isDarkMode = themeController.isDarkMode.value;
+
     showModalBottomSheet(
       context: context,
-      backgroundColor: const Color(0xFF1E2A2F),
+      backgroundColor: isDarkMode
+          ? const Color(0xFF1E2A2F)
+          : Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      isScrollControlled: true,
       builder: (BuildContext context) {
-        return Wrap(
-          children: <Widget>[
-            ListTile(
-              leading: const Icon(Icons.delete, color: Colors.red),
-              title: const Text(
-                'Delete Task',
-                style: TextStyle(color: Colors.red),
+        return Container(
+          padding: EdgeInsets.symmetric(
+            vertical: 24,
+            horizontal: MediaQuery.of(context).size.width * 0.06,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(bottom: 20),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        'Completed Task Options',
+                        style: TextStyle(
+                          fontSize: isSmallScreen ? 20 : 24,
+                          fontWeight: FontWeight.bold,
+                          color: isDarkMode ? Colors.white : Colors.black87,
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () => Navigator.pop(context),
+                      child: Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: isDarkMode
+                              ? const Color(0xFF2A3642)
+                              : const Color(0xFFFFF8E1),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Icon(
+                          Icons.close,
+                          color: isDarkMode ? Colors.white70 : Colors.black54,
+                          size: isSmallScreen ? 20 : 24,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              onTap: () {
-                Navigator.pop(context);
-                controller.deleteTask(task.id.toString());
-              },
-            ),
-          ],
+              const Divider(color: Colors.amber, thickness: 0.5),
+              const SizedBox(height: 12),
+              _buildTaskOptionTile(
+                context: context,
+                icon: Icons.delete,
+                iconColor: Colors.red,
+                title: 'Delete Task',
+                subtitle: 'Remove this completed task permanently',
+                isDarkMode: isDarkMode,
+                isSmallScreen: isSmallScreen,
+                isDestructive: true,
+                onTap: () {
+                  Navigator.pop(context);
+                  controller.deleteTask(task.id.toString());
+                },
+              ),
+              const SizedBox(height: 12),
+            ],
+          ),
         );
       },
+    );
+  }
+
+  Widget _buildTaskOptionTile({
+    required BuildContext context,
+    required IconData icon,
+    required Color iconColor,
+    required String title,
+    required String subtitle,
+    required bool isDarkMode,
+    required bool isSmallScreen,
+    required VoidCallback onTap,
+    bool isDestructive = false,
+  }) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+          decoration: BoxDecoration(
+            color: isDarkMode
+                ? const Color(0xFF2A3642)
+                : const Color(0xFFFFF8E1),
+            borderRadius: BorderRadius.circular(12),
+            border: isDestructive
+                ? Border.all(color: Colors.red.withOpacity(0.3), width: 1)
+                : null,
+          ),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: iconColor.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Icon(
+                  icon,
+                  color: iconColor,
+                  size: isSmallScreen ? 22 : 26,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: TextStyle(
+                        fontSize: isSmallScreen ? 16 : 18,
+                        fontWeight: FontWeight.bold,
+                        color: isDestructive
+                            ? Colors.red
+                            : (isDarkMode ? Colors.white : Colors.black87),
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      subtitle,
+                      style: TextStyle(
+                        fontSize: isSmallScreen ? 12 : 14,
+                        color: isDarkMode ? Colors.white60 : Colors.black54,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Icon(
+                Icons.arrow_forward_ios,
+                color: isDarkMode ? Colors.white30 : Colors.black26,
+                size: isSmallScreen ? 16 : 18,
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -571,9 +708,9 @@ class DashboardScreen extends StatelessWidget {
                     style: TextStyle(
                       fontSize: isSmallScreen ? 14 : 16,
                       color:
-                          bgColor == Colors.amber[300]
-                              ? Colors.black
-                              : Colors.white,
+                      bgColor == Colors.amber[300]
+                          ? Colors.black
+                          : Colors.white,
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -846,52 +983,193 @@ class DashboardScreen extends StatelessWidget {
   }
 
   void _showOngoingTaskOptions(
-    BuildContext context,
-    Task task,
-    DashboardController controller,
-  ) {
+      BuildContext context,
+      Task task,
+      DashboardController controller,
+      ) {
+    final themeController = Get.find<ThemeController>();
+    final isSmallScreen = MediaQuery.of(context).size.width < 360;
+    final isDarkMode = themeController.isDarkMode.value;
+
     showModalBottomSheet(
       context: context,
-      backgroundColor: const Color(0xFF1E2A2F),
+      backgroundColor: isDarkMode
+          ? const Color(0xFF1E2A2F)
+          : Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      isScrollControlled: true,
       builder: (BuildContext context) {
-        return Wrap(
-          children: <Widget>[
-            ListTile(
-              leading: const Icon(Icons.check_circle, color: Colors.green),
-              title: const Text(
-                'Mark as Completed',
-                style: TextStyle(color: Colors.white),
+        return Container(
+          padding: EdgeInsets.symmetric(
+            vertical: 24,
+            horizontal: MediaQuery.of(context).size.width * 0.06,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(bottom: 20),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        'Task Options',
+                        style: TextStyle(
+                          fontSize: isSmallScreen ? 20 : 24,
+                          fontWeight: FontWeight.bold,
+                          color: isDarkMode ? Colors.white : Colors.black87,
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () => Navigator.pop(context),
+                      child: Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: isDarkMode
+                              ? const Color(0xFF2A3642)
+                              : const Color(0xFFFFF8E1),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Icon(
+                          Icons.close,
+                          color: isDarkMode ? Colors.white70 : Colors.black54,
+                          size: isSmallScreen ? 20 : 24,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              onTap: () {
-                Navigator.pop(context);
-                controller.markTaskAsCompleted(task.id.toString());
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.edit, color: Colors.white),
-              title: const Text(
-                'Edit Task',
-                style: TextStyle(color: Colors.white),
+              const Divider(color: Colors.amber, thickness: 0.5),
+              const SizedBox(height: 12),
+              _buildOptionTile(
+                context: context,
+                icon: Icons.check_circle,
+                iconColor: Colors.green,
+                title: 'Mark as Completed',
+                subtitle: 'Set this task as 100% complete',
+                isDarkMode: isDarkMode,
+                isSmallScreen: isSmallScreen,
+                onTap: () {
+                  Navigator.pop(context);
+                  controller.markTaskAsCompleted(task.id.toString());
+                },
               ),
-              onTap: () {
-                Navigator.pop(context);
-                controller.showEditTaskModal(task);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.delete, color: Colors.red),
-              title: const Text(
-                'Delete Task',
-                style: TextStyle(color: Colors.red),
+              _buildOptionTile(
+                context: context,
+                icon: Icons.edit,
+                iconColor: Colors.amber[400]!,
+                title: 'Edit Task',
+                subtitle: 'Modify task details and progress',
+                isDarkMode: isDarkMode,
+                isSmallScreen: isSmallScreen,
+                onTap: () {
+                  Navigator.pop(context);
+                  controller.showEditTaskModal(task);
+                },
               ),
-              onTap: () {
-                Navigator.pop(context);
-                controller.deleteTask(task.id.toString());
-              },
-            ),
-          ],
+              _buildOptionTile(
+                context: context,
+                icon: Icons.delete,
+                iconColor: Colors.red,
+                title: 'Delete Task',
+                subtitle: 'Remove this task permanently',
+                isDarkMode: isDarkMode,
+                isSmallScreen: isSmallScreen,
+                isDestructive: true,
+                onTap: () {
+                  Navigator.pop(context);
+                  controller.deleteTask(task.id.toString());
+                },
+              ),
+              const SizedBox(height: 12),
+            ],
+          ),
         );
       },
+    );
+  }
+
+  Widget _buildOptionTile({
+    required BuildContext context,
+    required IconData icon,
+    required Color iconColor,
+    required String title,
+    required String subtitle,
+    required bool isDarkMode,
+    required bool isSmallScreen,
+    required VoidCallback onTap,
+    bool isDestructive = false,
+  }) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+          decoration: BoxDecoration(
+            color: isDarkMode
+                ? const Color(0xFF2A3642)
+                : const Color(0xFFFFF8E1),
+            borderRadius: BorderRadius.circular(12),
+            border: isDestructive
+                ? Border.all(color: Colors.red.withOpacity(0.3), width: 1)
+                : null,
+          ),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: iconColor.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Icon(
+                  icon,
+                  color: iconColor,
+                  size: isSmallScreen ? 22 : 26,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: TextStyle(
+                        fontSize: isSmallScreen ? 16 : 18,
+                        fontWeight: FontWeight.bold,
+                        color: isDestructive
+                            ? Colors.red
+                            : (isDarkMode ? Colors.white : Colors.black87),
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      subtitle,
+                      style: TextStyle(
+                        fontSize: isSmallScreen ? 12 : 14,
+                        color: isDarkMode ? Colors.white60 : Colors.black54,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Icon(
+                Icons.arrow_forward_ios,
+                color: isDarkMode ? Colors.white30 : Colors.black26,
+                size: isSmallScreen ? 16 : 18,
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -911,8 +1189,8 @@ class DashboardScreen extends StatelessWidget {
       padding: EdgeInsets.all(isSmallScreen ? 12 : 16),
       decoration: BoxDecoration(
         color: controller.themeController.isDarkMode.value
-            ? const Color(0xFF2A3642)
-            : Colors.grey[200],
+          ? const Color(0xFF1E2A2F)
+          : const Color(0xFFFFF8E1),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Column(
@@ -926,7 +1204,9 @@ class DashboardScreen extends StatelessWidget {
                   style: TextStyle(
                     fontSize: isSmallScreen ? 20 : 24,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: controller.themeController.isDarkMode.value
+                        ? Colors.white
+                        : Colors.black87,
                   ),
                 ),
               ),
@@ -981,6 +1261,7 @@ class DashboardScreen extends StatelessWidget {
   }
 
   Widget _buildTeamMembers(int teamSize, bool isSmallScreen) {
+    final controller = Get.find<DashboardController>();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -988,7 +1269,9 @@ class DashboardScreen extends StatelessWidget {
           'Team members',
           style: TextStyle(
             fontSize: isSmallScreen ? 14 : 16,
-            color: Colors.white,
+            color: controller.themeController.isDarkMode.value
+                ? Colors.white
+                : Colors.black87,
           ),
         ),
         const SizedBox(height: 8),
@@ -1017,6 +1300,7 @@ class DashboardScreen extends StatelessWidget {
   }
 
   Widget _buildDueDate(String dueDate, bool isSmallScreen) {
+    final controller = Get.find<DashboardController>();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -1024,7 +1308,9 @@ class DashboardScreen extends StatelessWidget {
           'Due on :',
           style: TextStyle(
             fontSize: isSmallScreen ? 14 : 16,
-            color: Colors.white,
+            color: controller.themeController.isDarkMode.value
+                ? Colors.white
+                : Colors.black87,
           ),
         ),
         const SizedBox(height: 8),
@@ -1033,7 +1319,9 @@ class DashboardScreen extends StatelessWidget {
           style: TextStyle(
             fontSize: isSmallScreen ? 14 : 16,
             fontWeight: FontWeight.bold,
-            color: Colors.white,
+            color: controller.themeController.isDarkMode.value
+                ? Colors.white
+                : Colors.black87,
           ),
         ),
       ],
@@ -1055,38 +1343,51 @@ class DashboardScreen extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          _buildNavItem(
-            context,
-            Icons.home,
-            'Home',
-            true,
-            isSmallScreen,
-            () => controller.navigateToPage(0),
+          Expanded(
+            child: _buildNavItem(
+              context,
+              Icons.home,
+              'Home',
+              true,
+              isSmallScreen,
+              () => controller.navigateToPage(0),
+            ),
           ),
-          _buildNavItem(
-            context,
-            Icons.chat_bubble_outline,
-            'Chat',
-            false,
-            isSmallScreen,
-            () => controller.navigateToPage(1),
+          Expanded(
+            child: _buildNavItem(
+              context,
+              Icons.chat_bubble_outline,
+              'Chat',
+              false,
+              isSmallScreen,
+              () => controller.navigateToPage(1),
+            ),
           ),
-          _buildAddButton(context, controller, isSmallScreen),
-          _buildNavItem(
-            context,
-            Icons.calendar_today,
-            'Calendar',
-            false,
-            isSmallScreen,
-            () => controller.navigateToPage(3),
+          Expanded(child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _buildAddButton(context, controller, isSmallScreen),
+            ],
+          )),
+          Expanded(
+            child: _buildNavItem(
+              context,
+              Icons.calendar_today,
+              'Calendar',
+              false,
+              isSmallScreen,
+              () => controller.navigateToPage(3),
+            ),
           ),
-          _buildNavItem(
-            context,
-            Icons.notifications_none,
-            'Notification',
-            false,
-            isSmallScreen,
-            () => controller.navigateToPage(4),
+          Expanded(
+            child: _buildNavItem(
+              context,
+              Icons.notifications_none,
+              'Notification',
+              false,
+              isSmallScreen,
+              () => controller.navigateToPage(4),
+            ),
           ),
         ],
       ),
