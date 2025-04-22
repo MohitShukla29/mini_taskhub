@@ -30,7 +30,8 @@
 
 Watch the full walkthrough of the **Mini TaskHub** app showcasing all key features implemented for the assignment.
 
-🔗 **Watch here:** [▶️ Watch Demo on Loom](https://www.loom.com/share/YOUR_VIDEO_LINK_HERE)  
+🔗 **Watch here:** [▶️ Watch Demo on Loom](https://www.loom.com/share/9f89faf870e94ecaa7408bf68012152f?sid=034e892b-7693-4a03-b3bc-c3278e151747)  
+👉 *It is recommended to watch the video at 1.2x speed for best experience.* 
 
 ## 📁 Folder Structure
 
