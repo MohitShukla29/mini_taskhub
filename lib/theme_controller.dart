@@ -9,7 +9,7 @@ class ThemeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    isDarkMode.value = _storage.read('isDarkMode') ?? false;
+    isDarkMode.value = _storage.read('isDarkMode') ?? true;
     _applyTheme();
   }
 
@@ -24,7 +24,7 @@ class ThemeController extends GetxController {
   }
   void resetTheme() {
     _storage.remove('isDarkMode');
-    isDarkMode.value = true; // Set to default theme (light)
+    isDarkMode.value = false;
     _applyTheme();
   }
 }
