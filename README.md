@@ -26,6 +26,12 @@
   <a href="https://getx.site/"><img src="https://img.shields.io/badge/GetX-7B1FA2?style=for-the-badge&logo=dart&logoColor=white"></a> 
 </div>
 
+## 🎥 Demo Video
+
+Watch the full walkthrough of the **Mini TaskHub** app showcasing all key features implemented for the assignment.
+
+🔗 **Watch here:** [▶️ Watch Demo on Loom](https://www.loom.com/share/YOUR_VIDEO_LINK_HERE)  
+
 ## 📁 Folder Structure
 
 ```
@@ -117,5 +123,13 @@ create table public.tasks (
 ### 5️⃣ Add to Your Project
 
 - Add these to your `.env` file (or directly into `supabase_service.dart`)
+
+### 🔄 Hot Reload vs 🔁 Hot Restart
+
+Hot Reload is used when making changes related to UI, styles, or layout within the widget tree.Hot Restart is used to apply changes that affect the entire app, especially when changes need to reflect across multiple screens or affect app-level logic.
+
+Hot Reload is faster as it only updates the changed code in the current widget without rebuilding the whole app.Hot Restart is slower because it completely rebuilds the app from scratch.
+
+Since Hot Reload only updates the current widget tree, it preserves the app state (like user login or counter values).In contrast, Hot Restart loses the app state as it restarts the entire application.
 
 
